@@ -1,4 +1,5 @@
 from flask import Flask
+from waitress import serve
 import os
 
 
@@ -34,3 +35,8 @@ def create_app(test_config=None):
     app.add_url_rule("/", endpoint="index")
 
     return app
+
+
+if __name__ == "__main__":
+    app = create_app()
+    serve(app, listen="*:80")
