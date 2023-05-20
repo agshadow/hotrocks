@@ -2,7 +2,7 @@ from flask import Flask
 import os
 from sqlmodel import Session, select
 from dotenv import load_dotenv
-from hotrocks.db import engine, create_tables
+from hotrocks.db import engine, create_tables, populate_user
 from flask_mail import Mail, Message
 from hotrocks.models import User
 from hotrocks.extensions import mail
@@ -26,6 +26,21 @@ def create_app(test_config=None):
     except OSError:
         pass
         load_dotenv()
+
+    # create the database
+    create_tables()
+
+    # check if data exists in database, and populate it
+    result = None
+    with Session(engine) as session:
+        stmt = select(User)
+        result = session.exec(stmt).first()
+
+    if result is None:
+        print("populating")
+        populate_user()
+    else:
+        print("data already loded")
 
     # need .env file with the username and password
     app.config["MAIL_SERVER"] = "smtp.gmail.com"

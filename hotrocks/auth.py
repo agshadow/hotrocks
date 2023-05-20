@@ -53,22 +53,22 @@ def login():
         username = request.form["username"]
         password = request.form["password"]
         error = None
-        user = None
+        results = None
         with Session(engine) as sqlsession:
             statement = select(User).where(col(User.username) == username)
-            results = sqlsession.exec(statement)
+            results = sqlsession.exec(statement).first()
 
-            try:
-                user = results.first()
-                print("results.first().dict()")
-            except Exception:
-                error = "Incorrect username."
-        if error is None and not check_password_hash(user.password, password):
+        if results is None:
+            error = "Incorrect username."
+            print(error)
+        elif not check_password_hash(results.password, password):
             error = "Incorrect password."
+            print(error)
 
         if error is None:
             session.clear()
-            session["user_id"] = user.id
+            session["user_id"] = results.id
+            print("my id:", results.id)
             return redirect(url_for("index"))
 
         flash(error)
