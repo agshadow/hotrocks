@@ -18,7 +18,6 @@ pip install -e .
 run the app in debug mode:
 flask --app hotrocks run --debug
 
-
 ## How to deploy to production
 
 install dependencies from pyproject.toml:
@@ -33,7 +32,6 @@ run on a waitress server:
 pip install waitress
 waitress-serve --call 'hotrocks:create_app'
 
-
 build docker container:
 pip freeze > requirements.txt
 
@@ -44,17 +42,15 @@ Then run the dockerfile on your local machine on 127.0.0.1:49160:
 Docker run -it -p 49160:80 -d hotrocks
 
 set up Azure
-create new container registry and copy the login server  eg  hotrocks.azurecr.io
-
-build docker container:
-docker build -t hotrocks.azurecr.io/hotrocks:latest .
+create new container registry and copy the login server eg hotrocks.azurecr.io
 
 loginto Azure
 docker login hotrocks.azurecr.io
 username : host name of the registry ( from access keysin the azure cp)
-password : the access key  (may have to enable admin user)
+password : the access key (may have to enable admin user)
 
-now push the container
+build docker container and push it:
+docker build -t hotrocks.azurecr.io/hotrocks:latest .
 docker push hotrocks.azurecr.io/hotrocks:latest
 
 now create a resource - webapp
@@ -73,16 +69,10 @@ this continouous deployment creates a webhook resource which will fire which wil
 
 so once the webhook is runnings.
 
-
 make whatever changes to the app code then build and push the repository.
-
-
 
 docker build -t hotrocks.azurecr.io/hotrocks:latest .
 
-docker push hotrocks.azurecr.io/hotrocks:latest 
+docker push hotrocks.azurecr.io/hotrocks:latest
 
 this should trigger the webhook.
-
-
-

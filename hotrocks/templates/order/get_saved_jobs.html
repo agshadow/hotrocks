@@ -6,9 +6,9 @@
 <h3>Click to review and send</h3>
 <ul>
   {% for savedJob in jobData %}
-  <li>{{savedJob["KEY:"]}}</li>
-  <li>{{savedJob["CREW MANAGER/PE"]}}</li>
-  <li><a href="{{url_for('order.review_and_submit', key=savedJob["KEY:"])}}">{{savedJob["CREW:"]}}</a></li>
+  <li>{{savedJob["id"]}}</li>
+  <li>{{savedJob["job_name"]}}</li>
+  <li><a href="{{url_for('order.review_and_submit', key=savedJob["id"])}}">{{savedJob["job_number"]}}</a></li>
   <li><br></li>
   {%endfor%}
 </ul>
