@@ -1,4 +1,16 @@
 {% extends 'base.html' %} {% block header %}
 <h1>{% block title %}Order Page Title{% endblock %}</h1>
-<a class="action" href="">New</a>
-{% endblock %} {% block content %} HOME SCREEN {% endblock %}
+<a class="action" href="">Job Order Screen</a>
+{% endblock %} {% block content %} HOME SCREEN
+<br />
+<br />
+<a href="{{url_for('order.input_new_job')}}">Input Job Detail</a>
+
+<br />
+<a href="{{url_for('order.get_saved_jobs')}}">Get Saved Job details</a>
+<br />
+<a href="{{url_for('order.review_and_submit')}}"
+  >Review and submit Job details</a
+>
+<br />
+{% endblock %}

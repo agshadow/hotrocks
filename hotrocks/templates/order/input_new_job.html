@@ -1,0 +1,15 @@
+{% extends 'base.html' %} {% block header %}
+<h1>{% block title %}Order Page Title{% endblock %}</h1>
+<a class="action" href="">Job Order Screen</a>
+{% endblock %} {% block content %}
+<h1>Input New Job</h1>
+<form action="input_new_job" method="post">
+  {% for heading in headings %}
+  <label for="{{heading}}">{{heading}}</label>
+  <input type="text" name="{{heading}}" value="" required />
+  <br />
+  {%endfor%}
+  <input type="submit" value="Save" />
+</form>
+
+{% endblock %}

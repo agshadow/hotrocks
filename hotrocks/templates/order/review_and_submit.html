@@ -1,0 +1,29 @@
+{% extends 'base.html' %} {% block header %}
+<h1>{% block title %}Order Page Title{% endblock %}</h1>
+<a class="action" href="">Job Order Screen</a>
+{% endblock %} {% block content %}
+<h1>Review Saved Jobs</h1>
+
+<br />
+
+<form action="review_and_submit" method="POST">
+  {% for heading in headings %}
+  <label for="{{heading}}">{{heading}}</label>
+  <input type="text" name="{{heading}}" value="{{jobData[heading]}}" required />
+  <br />
+  {%endfor%} <input type="hidden" name="KEY:" value="{{jobData["KEY:"]}}">
+  <br />
+  <label for="emailaddr">Email address</label>
+  <input type="email" name="emailaddr" value="AFAApp2023@gmail.com" />
+  <br />
+  <input type="submit" value="Save and Send" />
+</form>
+<!--
+<form action="review_and_submit" method="post">
+  <label for="key">key</label>
+  <input type="string" name="key" value="{{jobData["KEY:"]}}" required />
+  <br />
+  <input type="submit" value="Save" />
+</form>
+-->
+{% endblock %}
