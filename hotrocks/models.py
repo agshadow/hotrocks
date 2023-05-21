@@ -12,6 +12,7 @@ class User(SQLModel, table=True):
     # email: str = Field(sa_column=Column("email", String, unique=True))
 
 
+"""
 class Job(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     client: str = Field(index=True)
@@ -21,6 +22,32 @@ class Job(SQLModel, table=True):
     map: Optional[str]
     crew_manager: str
     profiling: Optional[str]
+"""
+
+
+class Job(SQLModel, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+    date: Optional[datetime]
+    shift: Optional[str]
+    crew: Optional[str]
+    crew_manager: str
+    asphalt_crew_on_site: Optional[str]
+    special_ppe_requirements: Optional[str]
+    special_instructions: Optional[str]
+    client: str = Field(index=True)
+    job_name: str = Field(index=True)
+    job_number: Optional[str] = Field(index=True)
+    location: Optional[str]
+    map: Optional[str]
+    supply_plant: Optional[str]
+    asphalt: Optional[str]
+    job_id: Optional[str]
+    trucks: Optional[str]
+    gear: Optional[str]
+    float: Optional[str]
+    profiling: Optional[str]
+    traffic_control: Optional[str]
+    compaction_testing: Optional[str]
 
 
 class Mixes(SQLModel, table=True):

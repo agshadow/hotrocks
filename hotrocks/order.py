@@ -1,9 +1,9 @@
-from flask import Blueprint, render_template, request, redirect, url_for
+from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_mail import Mail, Message
 from hotrocks.auth import login_required
 from hotrocks.extensions import mail
 
-from sqlmodel import Session, select
+from sqlmodel import Session, select, col
 from hotrocks.db import engine
 from hotrocks.models import Job
 
@@ -89,9 +89,9 @@ def review_and_submit():
 
         # TODO  Save the record
         # TODO  send email
-        crew = request.form.get("CREW:")
-        date = request.form.get("DATE:")
-        job = request.form.get("JOB NAME:")
+        crew = request.form.get("crew_manager")
+        date = request.form.get("client")
+        job = request.form.get("job_name")
         print(f"{crew} - {date} - {job}")
         emailaddr = request.form.get("emailaddr")
         msg = Message(
@@ -101,12 +101,21 @@ def review_and_submit():
         )
         # format the message
 
-        # headingsList = loadHeadings()
+        # TODO PUT IN NEW FUNCTION Load headings list
+        with Session(engine) as sqlsession:
+            statement = select(Job)
+            results = sqlsession.exec(statement).first()
+            results_dict = results.dict()
+            del results_dict["id"]
+        headingsList = []
+        for key, val in results_dict.items():
+            headingsList.append(key)
+
         messageBody = "<table>"
-        # for heading in headingsList:
-        #    messageBody += (
-        #        f"<tr><td>{heading}</td><td> {request.form.get(heading)}\n</td></tr>"
-        #    )
+        for heading in headingsList:
+            messageBody += (
+                f"<tr><td>{heading}</td><td> {request.form.get(heading)}\n</td></tr>"
+            )
 
         messageBody += "</table>"
         print(messageBody)
@@ -119,12 +128,37 @@ def review_and_submit():
     else:
         # url is: /ques/?idd=ABC
         key = request.args.get("key", default="", type=int)
-        # TODO create method to get entry from JSON from the key
-        job = 1
+        error = None
 
+        if not key:
+            error = "No record specified"
+            print("error no record")
+
+        if error is not None:
+            flash(error)
+            print("redirecting)")
+            return redirect(url_for("order.index"))
+
+        # TODO create method to get entry from JSON from the key
+        print("key2", key)
+        job = key
         # print("job:", job)
         # headingsList = loadHeadings()
         headingsList = ("heading1", "heading2")
+
+        # get data from database for id = key
+        with Session(engine) as sqlsession:
+            statement = select(Job).where(col(Job.id) == key)
+            results = sqlsession.exec(statement).first()
+            print("results: ", results.dict())
+            results_dict = results.dict()
+            del results_dict["id"]
+
+        print("results:2 ", results_dict)
+        headingsList = []
+        for key, val in results_dict.items():
+            headingsList.append(key)
+        print(headingsList)
         return render_template(
-            "order/review_and_submit.html", jobData=job, headings=headingsList
+            "order/review_and_submit.html", jobData=results_dict, headings=headingsList
         )
