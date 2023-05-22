@@ -1,6 +1,5 @@
-from typing import Optional
 from datetime import datetime
-from sqlmodel import SQLModel, create_engine, Field, Column, String
+from sqlmodel import SQLModel, create_engine
 
 from .models import User, Mixes, JobAsphalt, JobOrder, Job
 

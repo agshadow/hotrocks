@@ -3,7 +3,6 @@ import os
 from sqlmodel import Session, select
 from dotenv import load_dotenv
 from hotrocks.db import engine, create_tables, populate_user
-from flask_mail import Mail, Message
 from hotrocks.models import User
 from hotrocks.extensions import mail
 

@@ -4,12 +4,15 @@
 {% endblock %} {% block content %}
 <h1>Input New Job</h1>
 <form action="input_new_job" method="post">
-  {% for heading in headings %}
+  {% for heading in headings %} {% if db_headings[heading] != 'id'%}
   <label for="{{heading}}">{{heading}}</label>
-  <input type="text" name="{{heading}}" value="" required />
+  <input type="text" name="{{db_headings[heading]}}" value="" />
   <br />
-  {%endfor%}
+  {% endif %} {%endfor%}
   <input type="submit" value="Save" />
 </form>
-
-{% endblock %}
+{%for key in db_headings%}
+<ul>
+  <li>{{key}} : {{db_headings[key]}}</li>
+</ul>
+{%endfor%} {% endblock %}

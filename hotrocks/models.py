@@ -1,4 +1,4 @@
-from sqlmodel import SQLModel, Column, String, Field
+from sqlmodel import SQLModel, Field
 from typing import Optional
 from datetime import datetime
 

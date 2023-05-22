@@ -1,7 +1,8 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
-from flask_mail import Mail, Message
+from flask_mail import Message
 from hotrocks.auth import login_required
 from hotrocks.extensions import mail
+from hotrocks.mapping import job_title_list, get_job_mapping
 
 from sqlmodel import Session, select, col
 from hotrocks.db import engine
@@ -19,39 +20,19 @@ def index():
 @bp.route("/input_new_job", methods=["GET", "POST"])
 @login_required
 def input_new_job():
-    # get current job from post method.
-    currentJob = {}
     if request.method == "POST":
-        print(request.form)
-        from werkzeug.datastructures import ImmutableMultiDict
-
-        imd = request.form
-        print(imd.to_dict(flat=True))
-
-        newJob = Job(**imd.to_dict(flat=True))
-
         with Session(engine) as sqlsession:
-            sqlsession.add(newJob)
+            sqlsession.add(Job(**request.form.to_dict(flat=True)))
             sqlsession.commit()
-        # TODO flash message Saved
+
+        flash("Saved record")
         return redirect(url_for("index"))
     else:
-        # headingsList = loadHeadings()
-        # TODO headings list
-        print("loading headings")
-        with Session(engine) as sqlsession:
-            statement = select(Job)
-            results = sqlsession.exec(statement).first()
-            print("results: ", results)
-            results_dict = results.dict()
-            del results_dict["id"]
-
-        print("results:2 ", results_dict)
-        headingsList = []
-        for key, val in results_dict.items():
-            headingsList.append(key)
-        print(headingsList)
-        return render_template("order/input_new_job.html", headings=headingsList)
+        return render_template(
+            "order/input_new_job.html",
+            headings=job_title_list,
+            db_headings=get_job_mapping(),
+        )
 
 
 @bp.route("/get_saved_jobs")
@@ -83,50 +64,46 @@ def get_saved_jobs():
 @login_required
 def review_and_submit():
     if request.method == "POST":
-        print(request.form["KEY:"])
         # todo save the message again
-        print("SAVED")
+        job = Job(**request.form.to_dict(flat=True))
+        with Session(engine) as sqlsession:
+            statement = select(Job).where(col(Job.id) == job.id)
+            results = sqlsession.exec(statement).first()
+            sqlsession.delete(results)
+            sqlsession.commit()
+            sqlsession.add(job)
+            print("added")
+            sqlsession.commit()
+            print("committed")
+            sqlsession.refresh(job)
+            print("refreshed")
 
-        # TODO  Save the record
-        # TODO  send email
-        crew = request.form.get("crew_manager")
-        date = request.form.get("client")
-        job = request.form.get("job_name")
-        print(f"{crew} - {date} - {job}")
+        flash("Saved record")
+        print("saved record", job.dict())
         emailaddr = request.form.get("emailaddr")
         msg = Message(
-            f"{crew} - {date} - {job}",
+            f"{job.crew} - {job.date} - {job.job_name}",
             sender="AFAApp2023@gmail.com",
             recipients=[emailaddr],
         )
         # format the message
 
-        # TODO PUT IN NEW FUNCTION Load headings list
-        with Session(engine) as sqlsession:
-            statement = select(Job)
-            results = sqlsession.exec(statement).first()
-            results_dict = results.dict()
-            del results_dict["id"]
-        headingsList = []
-        for key, val in results_dict.items():
-            headingsList.append(key)
-
         messageBody = "<table>"
-        for heading in headingsList:
-            messageBody += (
-                f"<tr><td>{heading}</td><td> {request.form.get(heading)}\n</td></tr>"
-            )
+        headings = job_title_list
+        db_headings = get_job_mapping()
+        for heading in headings:
+            messageBody += f"<tr><td>{heading}</td><td> {job.dict()[db_headings[heading]]}\n</td></tr>"
 
         messageBody += "</table>"
         print(messageBody)
 
         msg.html = messageBody
-        mail.send(msg)
+        # mail.send(msg)
 
         return render_template("order/email_send_result.html", result="Success")
 
     else:
-        # url is: /ques/?idd=ABC
+        # url is: review_and_submit?key=7
         key = request.args.get("key", default="", type=int)
         error = None
 
@@ -139,26 +116,26 @@ def review_and_submit():
             print("redirecting)")
             return redirect(url_for("order.index"))
 
-        # TODO create method to get entry from JSON from the key
-        print("key2", key)
-        job = key
-        # print("job:", job)
-        # headingsList = loadHeadings()
-        headingsList = ("heading1", "heading2")
-
         # get data from database for id = key
         with Session(engine) as sqlsession:
             statement = select(Job).where(col(Job.id) == key)
             results = sqlsession.exec(statement).first()
-            print("results: ", results.dict())
             results_dict = results.dict()
-            del results_dict["id"]
 
-        print("results:2 ", results_dict)
-        headingsList = []
-        for key, val in results_dict.items():
-            headingsList.append(key)
-        print(headingsList)
         return render_template(
-            "order/review_and_submit.html", jobData=results_dict, headings=headingsList
+            "order/review_and_submit.html",
+            jobData=results_dict,
+            headings=job_title_list,
+            db_headings=get_job_mapping(),
         )
+
+
+@bp.route("/save_record", methods=["GET", "POST"])
+@login_required
+def save_record():
+    if request.method == "POST":
+        with Session(engine) as sqlsession:
+            sqlsession.add(Job(**request.form.to_dict(flat=True)))
+            sqlsession.commit()
+
+        flash("Saved record")

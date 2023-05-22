@@ -7,23 +7,20 @@
 <br />
 
 <form action="review_and_submit" method="POST">
-  {% for heading in headings %}
+  {% for heading in headings %}{% if db_headings[heading] != 'id'%}
   <label for="{{heading}}">{{heading}}</label>
-  <input type="text" name="{{heading}}" value="{{jobData[heading]}}" required />
+  <input
+    type="text"
+    name="{{db_headings[heading]}}"
+    value="{{jobData[db_headings[heading]]}}"
+  />
   <br />
-  {%endfor%} <input type="hidden" name="KEY:" value="{{jobData["KEY:"]}}">
+  {%endif%}{%endfor%} <input type="hidden" name="id" value="{{jobData["id"]}}">
   <br />
   <label for="emailaddr">Email address</label>
   <input type="email" name="emailaddr" value="AFAApp2023@gmail.com" />
   <br />
   <input type="submit" value="Save and Send" />
+  <input type="submit" formaction="save_record" value="Save" />
 </form>
-<!--
-<form action="review_and_submit" method="post">
-  <label for="key">key</label>
-  <input type="string" name="key" value="{{jobData["KEY:"]}}" required />
-  <br />
-  <input type="submit" value="Save" />
-</form>
--->
-{% endblock %}
+{{headings}} {{jobData}} {{db_headings}}{% endblock %}

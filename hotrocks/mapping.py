@@ -1,4 +1,4 @@
-from models import Job
+from hotrocks.models import Job
 
 job_title_list = [
     "ID:",
@@ -28,7 +28,7 @@ job_title_list = [
 def get_job_mapping():
     job_mapping = {}
     for a, b in zip(Job.__fields__.keys(), job_title_list):
-        job_mapping[a] = b
+        job_mapping[b] = a
     return job_mapping
 
 
