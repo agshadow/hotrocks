@@ -1,6 +1,6 @@
 from sqlmodel import SQLModel, Field
 from typing import Optional
-from datetime import datetime
+from datetime import date
 
 
 class User(SQLModel, table=True):
@@ -27,7 +27,7 @@ class Job(SQLModel, table=True):
 
 class Job(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
-    date: Optional[datetime]
+    date: Optional[date]
     shift: Optional[str]
     crew: Optional[str]
     crew_manager: str
@@ -59,7 +59,7 @@ class Mixes(SQLModel, table=True):
 
 class JobOrder(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
-    date: Optional[datetime]
+    date: Optional[date]
     shift_day_night: Optional[str]
     crew: Optional[str]
     asphalt_crew_on_site: Optional[str]

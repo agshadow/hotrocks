@@ -4,8 +4,10 @@ from hotrocks.auth import login_required
 from hotrocks.extensions import mail
 from hotrocks.mapping import job_title_list, get_job_mapping
 
+from datetime import date
+
 from sqlmodel import Session, select, col
-from hotrocks.db import engine
+from hotrocks.db import engine, save_job_record
 from hotrocks.models import Job
 
 bp = Blueprint("order", __name__)
@@ -66,39 +68,28 @@ def review_and_submit():
     if request.method == "POST":
         # todo save the message again
         job = Job(**request.form.to_dict(flat=True))
-        with Session(engine) as sqlsession:
-            statement = select(Job).where(col(Job.id) == job.id)
-            results = sqlsession.exec(statement).first()
-            sqlsession.delete(results)
-            sqlsession.commit()
-            sqlsession.add(job)
-            print("added")
-            sqlsession.commit()
-            print("committed")
-            sqlsession.refresh(job)
-            print("refreshed")
+        savedJob = save_job_record(job)
 
         flash("Saved record")
-        print("saved record", job.dict())
+        print("saved record", savedJob.dict())
         emailaddr = request.form.get("emailaddr")
         msg = Message(
-            f"{job.crew} - {job.date} - {job.job_name}",
+            f"{savedJob.crew} - {savedJob.date} - {savedJob.job_name}",
             sender="AFAApp2023@gmail.com",
             recipients=[emailaddr],
         )
         # format the message
 
         messageBody = "<table>"
-        headings = job_title_list
         db_headings = get_job_mapping()
-        for heading in headings:
-            messageBody += f"<tr><td>{heading}</td><td> {job.dict()[db_headings[heading]]}\n</td></tr>"
+        for heading in job_title_list:
+            messageBody += f"<tr><td>{heading}</td><td> {savedJob.dict()[db_headings[heading]]}\n</td></tr>"
 
         messageBody += "</table>"
         print(messageBody)
 
         msg.html = messageBody
-        # mail.send(msg)
+        mail.send(msg)
 
         return render_template("order/email_send_result.html", result="Success")
 
@@ -133,9 +124,11 @@ def review_and_submit():
 @bp.route("/save_record", methods=["GET", "POST"])
 @login_required
 def save_record():
+    print("SAVING RECORD \n --------")
     if request.method == "POST":
-        with Session(engine) as sqlsession:
-            sqlsession.add(Job(**request.form.to_dict(flat=True)))
-            sqlsession.commit()
+        job = Job(**request.form.to_dict(flat=True))
+        save_job_record(job)
 
+        print("RECORD SAVED\n --------", newJob)
         flash("Saved record")
+        return render_template("order/index.html")

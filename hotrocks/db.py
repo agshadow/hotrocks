@@ -1,5 +1,5 @@
 from datetime import datetime
-from sqlmodel import SQLModel, create_engine
+from sqlmodel import SQLModel, create_engine, Session, col, select
 
 from .models import User, Mixes, JobAsphalt, JobOrder, Job
 
@@ -99,6 +99,26 @@ def populate_user():
         sqlsession.add(job_asphalt3)
         sqlsession.add(job_asphalt4)
         sqlsession.commit()
+
+
+def save_job_record(job):
+    with Session(engine) as sqlsession:
+        # get job from database by id in form
+        statement = select(Job).where(col(Job.id) == job.id)
+        stored_job_from_db = sqlsession.exec(statement).first()
+
+        # copy incoming data from form to a dictonary, excluding the ID
+        update_data = job.dict(exclude_unset=True, exclude={"id"})
+
+        # copy the updated data into the stored job from the db
+        for key, val in update_data.items():
+            print("setattr():", key, " : ", val)
+            setattr(stored_job_from_db, key, val)
+
+        sqlsession.add(stored_job_from_db)
+        sqlsession.commit()
+        sqlsession.refresh(stored_job_from_db)
+    return stored_job_from_db
 
 
 if __name__ == "__main__":
