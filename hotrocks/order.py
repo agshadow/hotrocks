@@ -78,6 +78,12 @@ def review_and_submit():
             sender="AFAApp2023@gmail.com",
             recipients=[emailaddr],
         )
+
+        # if nightshift then add Nightshif to title.
+        if savedJob.shift.lower() == "night" or savedJob.shift.lower() == "nightshift":
+            msg.subject = (
+                f"{savedJob.crew} - Nightshift -  {savedJob.date} - {savedJob.job_name}"
+            )
         # format the message
 
         messageBody = "<table>"
