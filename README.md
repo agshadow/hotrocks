@@ -10,6 +10,11 @@ git clone https://github.com/agshadow/hotrocks
 set up virtual environment:
 python -m venv venv
 
+create .env file with the following:
+emailUsername = "email@email.com"
+emailPassword = "emailpassword"
+adminPassword = "password hash" (werkzeug.security ->generate_password_hash)
+
 install dependencies from pyproject.toml:
 pip install -e .
 

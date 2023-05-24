@@ -4,7 +4,6 @@ from hotrocks.auth import login_required
 from hotrocks.extensions import mail
 from hotrocks.mapping import job_title_list, get_job_mapping
 
-from datetime import date
 
 from sqlmodel import Session, select, col
 from hotrocks.db import engine, save_job_record
@@ -69,9 +68,9 @@ def review_and_submit():
         # todo save the message again
         job = Job(**request.form.to_dict(flat=True))
         savedJob = save_job_record(job)
-
         flash("Saved record")
-        print("saved record", savedJob.dict())
+
+        # set up email address
         emailaddr = request.form.get("emailaddr")
         msg = Message(
             f"{savedJob.crew} - {savedJob.date} - {savedJob.job_name}",
@@ -89,7 +88,8 @@ def review_and_submit():
         messageBody = "<table>"
         db_headings = get_job_mapping()
         for heading in job_title_list:
-            messageBody += f"<tr><td>{heading}</td><td> {savedJob.dict()[db_headings[heading]]}\n</td></tr>"
+            if db_headings[heading] != "id":
+                messageBody += f"<tr><td>{heading}</td><td> {savedJob.dict()[db_headings[heading]]}\n</td></tr>"
 
         messageBody += "</table>"
         print(messageBody)
@@ -135,6 +135,5 @@ def save_record():
         job = Job(**request.form.to_dict(flat=True))
         save_job_record(job)
 
-        print("RECORD SAVED\n --------", newJob)
         flash("Saved record")
         return render_template("order/index.html")

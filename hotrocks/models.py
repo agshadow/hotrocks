@@ -41,7 +41,6 @@ class Job(SQLModel, table=True):
     map: Optional[str]
     supply_plant: Optional[str]
     asphalt: Optional[str]
-    job_id: Optional[str]
     trucks: Optional[str]
     gear: Optional[str]
     float: Optional[str]

@@ -3,6 +3,8 @@ from sqlmodel import SQLModel, create_engine, Session, col, select
 
 from .models import User, Mixes, JobAsphalt, JobOrder, Job
 
+import os
+
 DB_FILE = "db.sqlite3"
 engine = create_engine(f"sqlite:///{DB_FILE}", echo=True)
 
@@ -12,27 +14,56 @@ def create_tables():
 
 
 def populate_user():
-    from werkzeug.security import generate_password_hash
     from sqlmodel import Session
 
     with Session(engine) as sqlsession:
-        userJulian = User(username="Julian", password=generate_password_hash("Julian"))
-        userLibby = User(username="Libby", password=generate_password_hash("Libby"))
-        sqlsession.add(userJulian)
-        sqlsession.add(userLibby)
+        userAdmin = User(username="Admin", password=os.environ.get("adminPassword"))
+        sqlsession.add(userAdmin)
         sqlsession.commit()
 
         job1 = Job(
-            client="Winslow",
-            job_name="Thornhill Stage 1b",
-            job_number="22-12-1234",
-            crew_manager="Julian",
+            date="2023-05-23",
+            shift="night",
+            crew="Crew 1",
+            crew_manager="Grant",
+            asphalt_crew_on_site="7pm",
+            special_ppe_requirements="Hard Hat",
+            special_instructions="Tack Coat",
+            client="Joes Construction",
+            job_name="Thornhill Stage 9",
+            job_number="22-02-1234",
+            location="thornhill rd thornhill",
+            map="96 A 12",
+            supply_plant="Laverton",
+            asphalt="14V 300T on site 9pm",
+            trucks="tandem",
+            gear="standard gear",
+            float="thornhill rd thornhill",
+            profiling="Bobcat mill 8pm",
+            traffic_control="By Client",
+            compaction_testing="None",
         )
         job2 = Job(
-            client="TDL",
-            job_name="Cecil St, Williamstown",
-            job_number="22-12-1231",
-            crew_manager="Julian",
+            date="2023-05-24",
+            shift="day",
+            crew="Crew 2",
+            crew_manager="Kenny",
+            asphalt_crew_on_site="7am",
+            special_ppe_requirements="Hard Hat",
+            special_instructions="Tack Coat",
+            client="Joes Construction",
+            job_name="Remington Stage 9",
+            job_number="21-02-1236",
+            location="Remington rd Remivale",
+            map="96 A 12",
+            supply_plant="Dandenong",
+            asphalt="20SI 550T on site 8am",
+            trucks="track and trailer",
+            gear="standard gear",
+            float="Remington rd Remivale",
+            profiling="None",
+            traffic_control="By Client",
+            compaction_testing="Yes",
         )
         sqlsession.add(job1)
         sqlsession.add(job2)
