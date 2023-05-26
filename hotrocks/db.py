@@ -1,9 +1,15 @@
 from datetime import datetime
 from sqlmodel import SQLModel, create_engine, Session, col, select
 
-from .models import User, Mixes, JobAsphalt, JobOrder, Job
-from flask import current_app
-from flask import g
+from .models import (
+    User,
+    Mixes,
+    JobAsphalt,
+    JobOrder,
+    Job,
+    ShiftSummary,
+    ShiftSummaryLog,
+)
 
 import os
 
@@ -129,6 +135,22 @@ def populate_user():
         sqlsession.add(job_asphalt2)
         sqlsession.add(job_asphalt3)
         sqlsession.add(job_asphalt4)
+        sqlsession.commit()
+
+        shiftsummary1 = ShiftSummary(
+            date="2023-05-26",
+            location="Pound Road",
+            shift="Night",
+            forecast="Fine 26 deg C",
+            scope="Pound Road EB",
+        )
+        shiftsummarylog1 = ShiftSummaryLog(
+            shiftsummaryid=1,
+            date=datetime.strptime("24/05/23 19:00", "%d/%m/%y %H:%M"),
+            data="Toolbox",
+        )
+        sqlsession.add(shiftsummary1)
+        sqlsession.add(shiftsummarylog1)
         sqlsession.commit()
 
 

@@ -1,7 +1,6 @@
-from flask import Flask, g, current_app
+from flask import Flask
 import os
-from sqlmodel import Session, select, create_engine, engine, SQLModel
-from dotenv import load_dotenv
+from sqlmodel import Session, select
 from hotrocks.models import User
 from hotrocks.extensions import mail
 from hotrocks.db import engine
@@ -13,9 +12,9 @@ def create_app(test_config=None):
 
     # set the secret key and the path /instance/hotrocks.sqlite in the app
     app.config.from_mapping(
-        SECRET_KEY="devaa", DATABASE=os.path.join(app.instance_path, "hotrocks.sqlite")
+        SECRET_KEY="devaa", DAABASE=os.path.join(app.instance_path, "hotrocks.sqlite")
     )
-    app.config["SQLALCHEMY_DATABASE_URI"] = f'sqlite:///{app.config["DATABASE"]}'
+
     if test_config is None:
         # load the instance config, if it exists, when not testing
         # not sure if this is working.
@@ -26,6 +25,8 @@ def create_app(test_config=None):
         with open(filename, mode="rb") as config_file:
             print(config_file.read())
         app.config.from_pyfile("config.py", silent=True)
+
+        print("secret key \n ---------: ", app.secret_key)
     else:
         # when its testing, update the DATABASE attribute to the app.
         print("loading from test config: ", test_config)
@@ -33,14 +34,15 @@ def create_app(test_config=None):
 
     print("secret key \n ---------: ", app.secret_key)
     # ensure the instance folder exists
-    try:
+    """try:
         os.makedirs(app.instance_path)
     except OSError:
-        pass
+        pass"""
 
     # create all tables
     from hotrocks.db import initialise_db_and_create_tables
 
+    print("about to initalise database")
     initialise_db_and_create_tables()
 
     print("tables created")

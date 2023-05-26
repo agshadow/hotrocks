@@ -8,7 +8,6 @@ from hotrocks.extensions import mail
 from hotrocks.mapping import job_title_list, get_job_mapping
 from hotrocks.db import engine, save_job_record
 from hotrocks.models import Job
-from hotrocks.shiftsummary import shiftsummary_index
 
 bp = Blueprint("order", __name__)
 

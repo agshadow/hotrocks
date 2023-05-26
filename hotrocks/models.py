@@ -1,6 +1,6 @@
 from sqlmodel import SQLModel, Field
 from typing import Optional
-from datetime import date
+from datetime import date, datetime
 
 
 class User(SQLModel, table=True):
@@ -47,6 +47,32 @@ class Job(SQLModel, table=True):
     profiling: Optional[str]
     traffic_control: Optional[str]
     compaction_testing: Optional[str]
+
+
+class ShiftSummary(SQLModel, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+    date: Optional[date]
+    location: Optional[str]
+    shift: Optional[str]
+    forecast: Optional[str]
+    scope: Optional[str]
+
+
+class ShiftSummaryLog(SQLModel, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+    shiftsummaryid: Optional[int] = Field(default=None, foreign_key="shiftsummary.id")
+    date: datetime
+    data: Optional[str]
+
+
+"""class ShiftSummaryLogAttachments(SQLModel, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+    shiftsummarylogid: Optional[int] = Field(
+        default=None, foreign_key="shiftsummarylog.id"
+    )
+    filedescription: Optional[str]
+    filelocation: Optional[str]
+"""
 
 
 class Mixes(SQLModel, table=True):
