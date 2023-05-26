@@ -1,0 +1,11 @@
+{% extends 'base.html' %} {% block header %}
+<h1>{% block title %}SHIFT SUMMARY{% endblock %}</h1>
+<a class="action" href="">Job Order Screen</a>
+{% endblock %} {% block content %}
+<br />
+<br />
+<a href="{{url_for('shiftsummary.new_shiftsummary')}}">New Shift Summary</a>
+
+>
+<br />
+{% endblock %}

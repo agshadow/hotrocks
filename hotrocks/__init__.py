@@ -10,23 +10,35 @@ from hotrocks.extensions import mail
 def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
+
+    # set the secret key and the path /instance/hotrocks.sqlite in the app
     app.config.from_mapping(
-        SECRET_KEY="dev", DATABASE=os.path.join(app.instance_path, "flaskr.sqlite")
+        SECRET_KEY="devaa", DATABASE=os.path.join(app.instance_path, "hotrocks.sqlite")
     )
     if test_config is None:
         # load the instance config, if it exists, when not testing
+        # not sure if this is working.
+        print("trying to load from pyfile")
+        print("app root path: ", app.root_path)
+        filename = os.path.join(app.root_path, "config.py")
+        print("file name", filename)
+        with open(filename, mode="rb") as config_file:
+            print(config_file.read())
         app.config.from_pyfile("config.py", silent=True)
     else:
-        app.config.from_mapping(test_config)
+        # when its testing, update the DATABASE attribute to the app.
+        print("loading from test config: ", test_config)
+        app.config.update(test_config)
 
+    print("secret key \n ---------: ", app.secret_key)
     # ensure the instance folder exists
     try:
         os.makedirs(app.instance_path)
     except OSError:
         pass
-        load_dotenv()
 
-    # create the database
+    # initalise the database create the database
+    print("DATABASE: ", app.config["DATABASE"])
     create_tables()
 
     # check if data exists in database, and populate it
@@ -61,8 +73,10 @@ def create_app(test_config=None):
     app.register_blueprint(auth.bp)
 
     from . import order
+    from . import shiftsummary
 
     app.register_blueprint(order.bp)
+    app.register_blueprint(shiftsummary.bp)
     app.add_url_rule("/", endpoint="index")
 
     return app

@@ -14,6 +14,7 @@ create .env file with the following:
 emailUsername = "email@email.com"
 emailPassword = "emailpassword"
 adminPassword = "password hash" (werkzeug.security ->generate_password_hash)
+note: any changes to the .env file, you will need to restart the server.
 
 install dependencies from pyproject.toml:
 pip install -e .

@@ -9,7 +9,7 @@ DB_FILE = "db.sqlite3"
 engine = create_engine(f"sqlite:///{DB_FILE}", echo=True)
 
 
-def create_tables():
+def initialise_db_and_create_tables():
     SQLModel.metadata.create_all(engine)
 
 

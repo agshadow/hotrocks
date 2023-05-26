@@ -1,13 +1,14 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_mail import Message
+import os
+from sqlmodel import Session, select, col
+
 from hotrocks.auth import login_required
 from hotrocks.extensions import mail
 from hotrocks.mapping import job_title_list, get_job_mapping
-
-
-from sqlmodel import Session, select, col
 from hotrocks.db import engine, save_job_record
 from hotrocks.models import Job
+from hotrocks.shiftsummary import shiftsummary_index
 
 bp = Blueprint("order", __name__)
 
@@ -74,7 +75,7 @@ def review_and_submit():
         emailaddr = request.form.get("emailaddr")
         msg = Message(
             f"{savedJob.crew} - {savedJob.date} - {savedJob.job_name}",
-            sender="AFAApp2023@gmail.com",
+            sender=os.environ.get("emailUsername"),
             recipients=[emailaddr],
         )
 
@@ -88,7 +89,11 @@ def review_and_submit():
         messageBody = "<table>"
         db_headings = get_job_mapping()
         for heading in job_title_list:
-            if db_headings[heading] != "id":
+            if db_headings[heading] == "id":
+                pass
+            elif db_headings[heading] == "date":
+                messageBody += f"<tr><td>DATE:</td><td> {savedJob.dict()[db_headings[heading]]}\n</td></tr>"
+            else:
                 messageBody += f"<tr><td>{heading}</td><td> {savedJob.dict()[db_headings[heading]]}\n</td></tr>"
 
         messageBody += "</table>"
@@ -118,12 +123,14 @@ def review_and_submit():
             statement = select(Job).where(col(Job.id) == key)
             results = sqlsession.exec(statement).first()
             results_dict = results.dict()
-
+        print("email: ", os.environ.get("emailUsername"))
         return render_template(
             "order/review_and_submit.html",
             jobData=results_dict,
             headings=job_title_list,
             db_headings=get_job_mapping(),
+            # default_email_address="poop",
+            default_email_address=os.environ.get("emailUsername"),
         )
 
 

@@ -18,7 +18,7 @@
   {%endif%}{%endfor%} <input type="hidden" name="id" value="{{jobData["id"]}}">
   <br />
   <label for="emailaddr">Email address</label>
-  <input type="email" name="emailaddr" value="AFAApp2023@gmail.com" />
+  <input type="email" name="emailaddr" value="{{default_email_address}}" />
   <br />
   <input type="submit" value="Save and Send" />
   <input type="submit" formaction="save_record" value="Save" />

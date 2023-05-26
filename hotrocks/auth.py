@@ -58,12 +58,15 @@ def login():
             statement = select(User).where(col(User.username) == username)
             results = sqlsession.exec(statement).first()
 
-        if results is None:
-            error = "Incorrect username."
-            print(error)
-        elif not check_password_hash(results.password, password):
-            error = "Incorrect password."
-            print(error)
+        try:
+            if results is None:
+                error = "Incorrect username."
+                print(error)
+            elif not check_password_hash(results.password, password):
+                error = "Incorrect password."
+                print(error)
+        except Exception:
+            pass
 
         if error is None:
             session.clear()
