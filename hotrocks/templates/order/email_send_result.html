@@ -1,7 +1,7 @@
 {% extends 'base.html' %} {% block header %}
-<h1>{% block title %}Order Page Title{% endblock %}</h1>
-<a class="action" href="">Job Order Screen</a>
-{% endblock %} {% block content %} HOME SCREEN {%if result == "Success"%}
+<h1>{% block title %}Confirmation Screen{% endblock %}</h1>
+
+{% endblock %} {% block content %} {%if result == "Success"%}
 <h1>Email sent successfully</h1>
 {%else%}
 <h1>Email send failed.</h1>

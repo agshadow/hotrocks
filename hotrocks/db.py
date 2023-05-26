@@ -2,6 +2,8 @@ from datetime import datetime
 from sqlmodel import SQLModel, create_engine, Session, col, select
 
 from .models import User, Mixes, JobAsphalt, JobOrder, Job
+from flask import current_app
+from flask import g
 
 import os
 
@@ -14,8 +16,6 @@ def initialise_db_and_create_tables():
 
 
 def populate_user():
-    from sqlmodel import Session
-
     with Session(engine) as sqlsession:
         userAdmin = User(username="Admin", password=os.environ.get("adminPassword"))
         sqlsession.add(userAdmin)
@@ -154,5 +154,5 @@ def save_job_record(job):
 
 if __name__ == "__main__":
     print("creating tables")
-    create_tables()
+    initialise_db_and_create_tables()
     print("created tables")

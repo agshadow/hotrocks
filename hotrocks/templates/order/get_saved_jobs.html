@@ -1,9 +1,9 @@
 {% extends 'base.html' %} {% block header %}
-<h1>{% block title %}Order Page Title{% endblock %}</h1>
-<a class="action" href="">Job Order Screen</a>
-{% endblock %} {% block content %} HOME SCREEN
-<h1>Saved Jobs:</h1>
-<h3>Click to review and send</h3>
+<h1>{% block title %}List Saved Jobs{% endblock %}</h1>
+
+{% endblock %} {% block content %}
+<h3>Your Saved Jobs:</h3>
+<h4>Click to review and send</h4>
 <ul>
   {% for savedJob in jobData %}
   <li>{{savedJob["id"]}}</li>

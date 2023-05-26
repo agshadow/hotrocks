@@ -1,8 +1,8 @@
 {% extends 'base.html' %} {% block header %}
-<h1>{% block title %}Order Page Title{% endblock %}</h1>
-<a class="action" href="">Job Order Screen</a>
+<h1>{% block title %}Input New Job{% endblock %}</h1>
+
 {% endblock %} {% block content %}
-<h1>Input New Job</h1>
+
 <form action="input_new_job" method="post">
   {% for heading in headings %} {% if db_headings[heading] != 'id'%}
   <label for="{{heading}}">{{heading}}</label>
@@ -11,8 +11,4 @@
   {% endif %} {%endfor%}
   <input type="submit" value="Save" />
 </form>
-{%for key in db_headings%}
-<ul>
-  <li>{{key}} : {{db_headings[key]}}</li>
-</ul>
-{%endfor%} {% endblock %}
+{% endblock %}

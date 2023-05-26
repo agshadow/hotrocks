@@ -1,10 +1,10 @@
-from flask import Flask
+from flask import Flask, g, current_app
 import os
-from sqlmodel import Session, select
+from sqlmodel import Session, select, create_engine, engine, SQLModel
 from dotenv import load_dotenv
-from hotrocks.db import engine, create_tables, populate_user
 from hotrocks.models import User
 from hotrocks.extensions import mail
+from hotrocks.db import engine
 
 
 def create_app(test_config=None):
@@ -15,6 +15,7 @@ def create_app(test_config=None):
     app.config.from_mapping(
         SECRET_KEY="devaa", DATABASE=os.path.join(app.instance_path, "hotrocks.sqlite")
     )
+    app.config["SQLALCHEMY_DATABASE_URI"] = f'sqlite:///{app.config["DATABASE"]}'
     if test_config is None:
         # load the instance config, if it exists, when not testing
         # not sure if this is working.
@@ -37,22 +38,31 @@ def create_app(test_config=None):
     except OSError:
         pass
 
-    # initalise the database create the database
-    print("DATABASE: ", app.config["DATABASE"])
-    create_tables()
+    # create all tables
+    from hotrocks.db import initialise_db_and_create_tables
 
+    initialise_db_and_create_tables()
+
+    print("tables created")
     # check if data exists in database, and populate it
     result = None
     with Session(engine) as session:
         stmt = select(User)
+        print("stmt: ", stmt)
         result = session.exec(stmt).first()
-
+        print("result: ", result)
+    print("check database: result: ", result)
     if result is None:
         print("populating")
+        from hotrocks.db import populate_user
+
         populate_user()
+        print("populated")
+
     else:
         print("data already loded")
 
+    print("setting up Mail settings")
     # need .env file with the username and password
     app.config["MAIL_SERVER"] = "smtp.gmail.com"
     app.config["MAIL_PORT"] = 465
@@ -80,7 +90,3 @@ def create_app(test_config=None):
     app.add_url_rule("/", endpoint="index")
 
     return app
-
-
-def create_db_tables():
-    create_tables()

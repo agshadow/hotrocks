@@ -5,10 +5,10 @@ from hotrocks.models import User, Job, Mixes, JobOrder, JobAsphalt
 
 
 DB_FILE = "db.sqlite3"
-engine = create_engine(f"sqlite:///{DB_FILE}", echo=False)
+engine = create_engine(current_app.config["DATABASE"], echo=False)
 
 
-def create_tables():
+def initialise_db_and_create_tables():
     SQLModel.metadata.create_all(engine)
 
 

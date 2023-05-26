@@ -1,10 +1,10 @@
 {% extends 'base.html' %} {% block header %}
-<h1>{% block title %}Order Page Title{% endblock %}</h1>
-<a class="action" href="">Job Order Screen</a>
+<h1>{% block title %}Review Screen {% endblock %}</h1>
+
 {% endblock %} {% block content %}
-<h1>Review Saved Jobs</h1>
 
 <br />
+<h3>Email and Save, or just Save your updated Job</h3>
 
 <form action="review_and_submit" method="POST">
   {% for heading in headings %}{% if db_headings[heading] != 'id'%}
@@ -23,4 +23,4 @@
   <input type="submit" value="Save and Send" />
   <input type="submit" formaction="save_record" value="Save" />
 </form>
-{{headings}} {{jobData}} {{db_headings}}{% endblock %}
+{% endblock %}

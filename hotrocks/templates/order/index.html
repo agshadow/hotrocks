@@ -1,7 +1,7 @@
 {% extends 'base.html' %} {% block header %}
-<h1>{% block title %}Order Page Title{% endblock %}</h1>
-<a class="action" href="">Job Order Screen</a>
-{% endblock %} {% block content %} HOME SCREEN
+<h1>{% block title %}Home Screen{% endblock %}</h1>
+
+{% endblock %} {% block content %}
 <br />
 <br />
 <a href="{{url_for('order.input_new_job')}}">Input Job Detail</a>
@@ -13,8 +13,6 @@
   >Review and submit Job details</a
 >
 <br /><br />
-<a href="{{url_for('shiftsummary.shiftsummary_index')}}"
-  >Review and submit Job details</a
->
+<a href="{{url_for('shiftsummary.shiftsummary_index')}}">Shift Summary</a>
 <br />
 {% endblock %}
