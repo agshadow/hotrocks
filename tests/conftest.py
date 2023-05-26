@@ -3,6 +3,8 @@ import tempfile
 
 import pytest
 from hotrocks import create_app
+from hotrocks.db import create_tables
+from db_test_data import populate_test_data
 
 # from flaskr import create_app
 # from flaskr.db import get_db, init_db
@@ -13,23 +15,23 @@ from hotrocks import create_app
 
 @pytest.fixture
 def app():
-    # db_fd, db_path = tempfile.mkstemp()
+    db_fd, db_path = tempfile.mkstemp()
 
     app = create_app(
         {
             "TESTING": True,
-            # "DATABASE": db_path,
+            "DATABASE": db_path,
         }
     )
-
-    # with app.app_context():
-    #    init_db()
-    #    get_db().executescript(_data_sql)
-
+    # create database and tables
+    create_tables()
+    # populate tables
+    populate_test_data()
+    print("populated user")
     yield app
 
-    # os.close(db_fd)
-    # os.unlink(db_path)
+    os.close(db_fd)
+    os.unlink(db_path)
 
 
 @pytest.fixture
