@@ -1,0 +1,15 @@
+{% extends 'base.html' %} {% block header %}
+<h1>{% block title %}Edit Shift Summary Log {% endblock %}</h1>
+
+{% endblock %} {% block content %} {{log}}
+<br />
+<form action="editlog" method="POST">
+  <label for="date">Date</label>
+  <input type="text" name="date" value="{{log["date"]}}" />
+  <br /><label for="data">Description</label>
+  <input type="text" name="data" value="{{log["data"]}}" /> <input type="hidden"
+  name="id" value="{{log["id"]}}">
+  <br />
+  <input type="submit" value="Save" />
+</form>
+{% endblock %}

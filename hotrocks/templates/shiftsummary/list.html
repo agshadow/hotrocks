@@ -1,10 +1,16 @@
 {% extends 'base.html' %} {% block header %}
 <h1>{% block title %}SHIFT SUMMARY{% endblock %}</h1>
 <a class="action" href=""
-  >Shift Summaries: /a> {% endblock %} {% block content %}
+  >Shift Summaries: </a> {% endblock %} {% block content %}
   <br />
   <br />
-  {{items}}
+  <ul>
+    {%for item in items%}
+    <li>{{item["date"]}} - 
+        <a href="{{url_for('shiftsummary.review_item', key=item['id'])}}">{{item["location"]}}</a>
+    </li>
+    {%endfor%}
+  </ul>
   <a href="{{url_for('shiftsummary.shiftsummary_list')}}">New Shift Summary</a>
 
   >

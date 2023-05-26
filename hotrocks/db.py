@@ -138,7 +138,7 @@ def populate_user():
         sqlsession.commit()
 
         shiftsummary1 = ShiftSummary(
-            date="2023-05-26",
+            date="2023-05-23",
             location="Pound Road",
             shift="Night",
             forecast="Fine 26 deg C",
@@ -149,8 +149,20 @@ def populate_user():
             date=datetime.strptime("24/05/23 19:00", "%d/%m/%y %H:%M"),
             data="Toolbox",
         )
+        shiftsummarylog2 = ShiftSummaryLog(
+            shiftsummaryid=1,
+            date=datetime.strptime("24/05/23 19:15", "%d/%m/%y %H:%M"),
+            data="Started Spraying, area was already clean.",
+        )
+        shiftsummarylog3 = ShiftSummaryLog(
+            shiftsummaryid=1,
+            date=datetime.strptime("24/05/23 20:15", "%d/%m/%y %H:%M"),
+            data="Started Laying",
+        )
         sqlsession.add(shiftsummary1)
         sqlsession.add(shiftsummarylog1)
+        sqlsession.add(shiftsummarylog2)
+        sqlsession.add(shiftsummarylog3)
         sqlsession.commit()
 
 
@@ -172,6 +184,38 @@ def save_job_record(job):
         sqlsession.commit()
         sqlsession.refresh(stored_job_from_db)
     return stored_job_from_db
+
+
+def save_log_record(shiftsummarylog):
+    with Session(engine) as sqlsession:
+        # get job from database by id in form
+        statement = select(ShiftSummaryLog).where(
+            col(ShiftSummaryLog.id) == shiftsummarylog.id
+        )
+        result = sqlsession.exec(statement).first()
+
+        # copy incoming data from form to a dictonary, excluding the ID
+        update_data = shiftsummarylog.dict(exclude_unset=True, exclude={"id"})
+
+        # copy the updated data into the stored job from the db
+        for key, val in update_data.items():
+            print("setattr():", key, " : ", val)
+            setattr(result, key, val)
+
+        sqlsession.add(result)
+        sqlsession.commit()
+        sqlsession.refresh(result)
+    return result
+
+
+def add_log(shiftsummarylog):
+    with Session(engine) as sqlsession:
+        print("Saving new log : \n -------------------------", shiftsummarylog)
+        sqlsession.add(shiftsummarylog)
+        sqlsession.commit()
+        sqlsession.refresh(shiftsummarylog)
+        print("saved new log : \n ------------------------- ", shiftsummarylog)
+    return shiftsummarylog
 
 
 if __name__ == "__main__":

@@ -1,0 +1,14 @@
+{% extends 'base.html' %} {% block header %}
+<h1>{% block title %}Add Shift Summary Log {% endblock %}</h1>
+{{shiftsummaryid}} {% endblock %} {% block content %} {{log}}
+<br />
+<form action="addlog" method="POST">
+  <label for="date">Date</label>
+  <input type="text" name="date" value="{{date}}" />
+  <br /><label for="data">Description</label>
+  <input type="text" name="data" value="" />
+  <input type="hidden" name="shiftsummaryid" value="{{shiftsummaryid}}" />
+  <br />
+  <input type="submit" value="Save" />
+</form>
+{% endblock %}
