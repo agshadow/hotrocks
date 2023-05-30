@@ -10,6 +10,9 @@ git clone https://github.com/agshadow/hotrocks
 set up virtual environment:
 python -m venv venv
 
+install packages from requirements.
+pip install -r requirement.txt
+
 create .env file with the following:
 emailUsername = "email@email.com"
 emailPassword = "emailpassword"
