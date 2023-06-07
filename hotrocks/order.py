@@ -122,13 +122,12 @@ def review_and_submit():
             statement = select(Job).where(col(Job.id) == key)
             results = sqlsession.exec(statement).first()
             results_dict = results.dict()
-        print("email: ", os.environ.get("emailUsername"))
+        print("emailll: ", os.environ.get("emailUsername"))
         return render_template(
             "order/review_and_submit.html",
             jobData=results_dict,
             headings=job_title_list,
             db_headings=get_job_mapping(),
-            # default_email_address="poop",
             default_email_address=os.environ.get("emailUsername"),
         )
 

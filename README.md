@@ -17,6 +17,10 @@ create .env file with the following:
 emailUsername = "email@email.com"
 emailPassword = "emailpassword"
 adminPassword = "password hash" (werkzeug.security ->generate_password_hash)
+
+use command line python to generate password_hash:
+python -c "from werkzeug.security import generate_password_hash; print(generate_password_hash('Password'))"
+
 note: any changes to the .env file, you will need to restart the server.
 
 install dependencies from pyproject.toml:
@@ -79,6 +83,8 @@ this continouous deployment creates a webhook resource which will fire which wil
 so once the webhook is runnings.
 
 make whatever changes to the app code then build and push the repository.
+
+docker build -t hotrocks.azurecr.io/hotrocks:latest --build-arg emailUsername=<USERNAME>@gmail.com --build-arg emailPassword=<<GMAIL PASSWORD> --build-arg adminPassword=<PASsWORDHASH> .
 
 docker build -t hotrocks.azurecr.io/hotrocks:latest .
 

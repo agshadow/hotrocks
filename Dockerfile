@@ -1,5 +1,7 @@
 FROM python:3-alpine
-
+ARG emailUsername
+ARG emailPassword
+ARG adminPassword
 # Create app directory
 WORKDIR /app
 
