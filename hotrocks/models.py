@@ -1,7 +1,6 @@
 from sqlmodel import SQLModel, Field
 from typing import Optional
 from datetime import date, datetime
-
 import dateutil.parser
 
 
@@ -70,6 +69,7 @@ class ShiftSummaryLog(SQLModel, table=True):
     def load_form(formdata):
         # validate the date
         formdata["date"] = dateutil.parser.parse(formdata["date"])
+        # formdata["date"] = "date"
         ssl = ShiftSummaryLog(**formdata)
         return ssl
 

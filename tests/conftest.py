@@ -3,8 +3,9 @@ import tempfile
 
 import pytest
 from hotrocks import create_app
-from hotrocks.db import initialise_db_and_create_tables
-from db_test_data import populate_test_data
+from hotrocks.db import initialise_db_and_create_tables, populate_user
+
+# from db_test_data import populate_test_data
 
 # from flaskr import create_app
 # from flaskr.db import get_db, init_db
@@ -28,7 +29,8 @@ def app():
     # create database and tables
     initialise_db_and_create_tables()
     # populate tables
-    populate_test_data()
+    populate_user
+    # populate_test_data()
     print("populated user")
     yield app
 

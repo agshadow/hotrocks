@@ -80,11 +80,13 @@ turn on continuous deployment and save
 
 this continouous deployment creates a webhook resource which will fire which will fire each time we push a container.
 
+now still in the webapp control panel go to settings->Configuration and add enviornment variables as [er the local .env file, dont forget to save it.
+
 so once the webhook is runnings.
 
 make whatever changes to the app code then build and push the repository.
 
-docker build -t hotrocks.azurecr.io/hotrocks:latest --build-arg emailUsername=<USERNAME>@gmail.com --build-arg emailPassword=<<GMAIL PASSWORD> --build-arg adminPassword=<PASsWORDHASH> .
+emailPassword=<<GMAIL PASSWORD> --build-arg adminPassword=<PASsWORDHASH> .
 
 docker build -t hotrocks.azurecr.io/hotrocks:latest .
 

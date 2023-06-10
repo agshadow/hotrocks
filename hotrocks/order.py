@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash
+from flask import Blueprint, render_template, request, redirect, url_for, flash, g
 from flask_mail import Message
 import os
 from sqlmodel import Session, select, col
@@ -15,7 +15,12 @@ bp = Blueprint("order", __name__)
 @bp.route("/")
 # @login_required
 def index():
-    return render_template("order/index.html")
+    return render_template(
+        "order/index.html",
+        MAIL_USERNAME=os.environ.get("emailUsername"),
+        MAIL_PASSWORD=os.environ.get("emailPassword"),
+        SECOND_MAIL_USERNAME=os.environ.get("adminPassword"),
+    )
 
 
 @bp.route("/input_new_job", methods=["GET", "POST"])

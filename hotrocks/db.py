@@ -25,7 +25,7 @@ def populate_user():
     with Session(engine) as sqlsession:
         userAdmin = User(
             username="Admin",
-            password="pbkdf2:sha256:600000$0p0kghnmSend9MJF$7482fc13610d5b76f33ad45ac9caa3fab64207a1f1785b1395df93d18c579888",
+            password=os.environ.get("adminPassword"),
         )
         sqlsession.add(userAdmin)
         sqlsession.commit()

@@ -25,9 +25,9 @@ def register():
         error = None
 
         if not username:
-            error = "Username is required."
+            error = "Incorrect username."
         elif not password:
-            error = "Password is required."
+            error = "Incorrect password."
 
         if error is None:
             try:
@@ -38,7 +38,7 @@ def register():
                     sqlsession.add(user)
                     sqlsession.commit()
             except Exception:
-                error = f"User {username} is already registered."
+                error = "already registered"
             else:
                 return redirect(url_for("auth.login"))
 

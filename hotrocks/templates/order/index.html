@@ -3,6 +3,10 @@
 
 {% endblock %} {% block content %}
 <br />
+
+mail user:{{MAIL_USERNAME}}<br />
+Mail pass:{{MAIL_PASSWORD}} <br />
+admim pwd hash= {{SECOND_MAIL_USERNAME}}
 <br />
 <a href="{{url_for('order.input_new_job')}}">Input Job Detail</a>
 
