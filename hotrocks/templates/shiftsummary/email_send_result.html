@@ -1,0 +1,12 @@
+{% extends 'base.html' %} {% block header %}
+<h1>{% block title %}Confirmation Screen{% endblock %}</h1>
+
+{% endblock %} {% block content %} {%if result == "Success"%}
+<h1>Email sent successfully</h1>
+{%else%}
+<h1>Email send failed.</h1>
+
+{%endif%}
+<br />
+<a href="{{url_for('index')}}">Click here to go Home</a>
+{% endblock %}

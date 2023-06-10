@@ -6,12 +6,12 @@
   <br />
   <ul>
     {%for item in items%}
-    <li>{{item["date"]}} - 
+    <li>{{item["date"].strftime('%d/%m/%Y')}} - 
         <a href="{{url_for('shiftsummary.review_item', key=item['id'])}}">{{item["location"]}}</a>
     </li>
     {%endfor%}
   </ul>
-  <a href="{{url_for('shiftsummary.shiftsummary_list')}}">New Shift Summary</a>
+  <a href="{{url_for('shiftsummary.new')}}">New Shift Summary</a>
 
   >
   <br />

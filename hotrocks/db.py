@@ -23,7 +23,10 @@ def initialise_db_and_create_tables():
 
 def populate_user():
     with Session(engine) as sqlsession:
-        userAdmin = User(username="Admin", password=os.environ.get("adminPassword"))
+        userAdmin = User(
+            username="Admin",
+            password="pbkdf2:sha256:600000$0p0kghnmSend9MJF$7482fc13610d5b76f33ad45ac9caa3fab64207a1f1785b1395df93d18c579888",
+        )
         sqlsession.add(userAdmin)
         sqlsession.commit()
 
@@ -216,6 +219,40 @@ def add_log(shiftsummarylog):
         sqlsession.refresh(shiftsummarylog)
         print("saved new log : \n ------------------------- ", shiftsummarylog)
     return shiftsummarylog
+
+
+def add_new_shiftsummary(shiftsummary):
+    with Session(engine) as sqlsession:
+        print("Saving new shift summary : \n -------------------------", shiftsummary)
+        sqlsession.add(shiftsummary)
+        sqlsession.commit()
+        sqlsession.refresh(shiftsummary)
+        print("saved new log : \n ------------------------- ", shiftsummary)
+    return shiftsummary
+
+
+def get_shift_summary_by_key(key):
+    # key = the id for the shift summary
+    # returns tuple with the shiftsummary dictionary followed by the tuple of the log dictionaries.
+    print("______________ Getting Shift summary by key: ", key)
+
+    with Session(engine) as sqlsession:
+        statement = select(ShiftSummary).where(col(ShiftSummary.id) == key)
+        shiftsummary = sqlsession.exec(statement).first()
+
+        statement = select(ShiftSummaryLog).where(
+            col(ShiftSummaryLog.shiftsummaryid) == key
+        )
+        shiftsummarylogs = sqlsession.exec(statement).all()
+    logs = []
+    for result in shiftsummarylogs:
+        print("shift summary log:", result.dict())
+        logs.append(result.dict())
+    print("_____ SORTING")
+    print(logs)
+    logs = sorted(logs, key=lambda d: d["date"], reverse=False)
+    print(logs)
+    return (shiftsummary.dict(), logs)
 
 
 if __name__ == "__main__":

@@ -74,7 +74,8 @@ def review_and_submit():
         emailaddr = request.form.get("emailaddr")
         msg = Message(
             f"{savedJob.crew} - {savedJob.date} - {savedJob.job_name}",
-            sender=os.environ.get("emailUsername"),
+            # sender=os.environ.get("emailUsername"),
+            sender="AFAAPP2023@gmail.com",
             recipients=[emailaddr],
         )
 
@@ -122,13 +123,12 @@ def review_and_submit():
             statement = select(Job).where(col(Job.id) == key)
             results = sqlsession.exec(statement).first()
             results_dict = results.dict()
-        print("emailll: ", os.environ.get("emailUsername"))
         return render_template(
             "order/review_and_submit.html",
             jobData=results_dict,
             headings=job_title_list,
             db_headings=get_job_mapping(),
-            default_email_address=os.environ.get("emailUsername"),
+            default_email_address="AFAAPP2023@gmail.com",
         )
 
 

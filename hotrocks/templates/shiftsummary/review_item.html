@@ -6,10 +6,10 @@
   <br />
   <table style="width:100%">
     <tr >
-    <td style="width:20%">Date:</td><td>{{item["date"]}}</td>
+    <td style="width:20%">Date:</td><td>{{item["date"].strftime('%d/%m/%Y')}}</td>
   </tr>
   <tr>
-    <td>Job Name:</td><td>{{item["location"]}}</td>
+    <td>Job Name:</td><td>{{item["location"]}}{{item["id"]}}</td>
   </tr>
   <tr>
     <td>Shift:</td><td>{{item["shift"]}}</td>
@@ -22,7 +22,7 @@
   </tr>
   {%for log in shiftsummarylogs%}
   <tr>
-    <td>{{log["date"]}}</td>
+    <td>{{log["date"].strftime('%d/%m/%Y - %H:%M')}}</td>
     <td>{{log["data"]}}</td>
     <td><a href="{{url_for('shiftsummary.editlog', key=log['id'])}}">Edit</a></td>
   </tr>
@@ -38,10 +38,18 @@
 
   <br>
   <br>
+  <form action="email_summary" method="POST">
+  <label for="emailaddr">Email address</label>
+  <input type="email" name="emailaddr" value="{{default_email_address}}" />
+  <input type="hidden" name="key" value="{{item["id"]}}"/>
+  <br />
+  <input type="submit" value="Send by Email" />
+</form>
+
   <br>
   <br>
   <br>
-  <a href="{{url_for('shiftsummary.shiftsummary_index')}}">New Shift Summary</a>
+  <a href="{{url_for('shiftsummary.shiftsummary_index')}}">Home</a>
 
   >
   <br />

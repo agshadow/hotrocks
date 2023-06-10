@@ -3,8 +3,12 @@
 {{shiftsummaryid}} {% endblock %} {% block content %} {{log}}
 <br />
 <form action="addlog" method="POST">
-  <label for="date">Date</label>
-  <input type="text" name="date" value="{{date}}" />
+  <label for="date">Date YYYY-MM-DD</label>
+  <input
+    type="text"
+    name="date"
+    value="{{date.strftime('%d/%m/%Y - %H:%M')}}"
+  />
   <br /><label for="data">Description</label>
   <input type="text" name="data" value="" />
   <input type="hidden" name="shiftsummaryid" value="{{shiftsummaryid}}" />

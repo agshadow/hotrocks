@@ -15,3 +15,5 @@ COPY . .
 
 EXPOSE 80
 CMD ["python","hotrocks.py"]
+
+

@@ -2,6 +2,8 @@ from sqlmodel import SQLModel, Field
 from typing import Optional
 from datetime import date, datetime
 
+import dateutil.parser
+
 
 class User(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
@@ -63,6 +65,17 @@ class ShiftSummaryLog(SQLModel, table=True):
     shiftsummaryid: Optional[int] = Field(default=None, foreign_key="shiftsummary.id")
     date: datetime
     data: Optional[str]
+
+    # returns a ShiftSummaryLog with date parsed
+    def load_form(formdata):
+        # validate the date
+        formdata["date"] = dateutil.parser.parse(formdata["date"])
+        ssl = ShiftSummaryLog(**formdata)
+        return ssl
+
+    def jprint(self, formdata):
+        print("Jprint: ", self.date, self.data)
+        print("🐟", formdata)
 
 
 """class ShiftSummaryLogAttachments(SQLModel, table=True):

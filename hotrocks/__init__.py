@@ -68,12 +68,16 @@ def create_app(test_config=None):
     # need .env file with the username and password
     app.config["MAIL_SERVER"] = "smtp.gmail.com"
     app.config["MAIL_PORT"] = 465
-    app.config["MAIL_USERNAME"] = os.environ.get("emailUsername")
-    app.config["MAIL_PASSWORD"] = os.environ.get("emailPassword")
+    app.config["MAIL_USERNAME"] = "AFAAPP2023@gmail.com"
+    app.config["MAIL_PASSWORD"] = "pvswobqubmdljauz"
+    # app.config["MAIL_USERNAME"] = os.environ.get("emailUsername")
+    # app.config["MAIL_PASSWORD"] = os.environ.get("emailPassword")
     app.config["MAIL_USE_SSL"] = True
     app.config["MAIL_USE_TLS"] = False
 
     mail.init_app(app)
+
+    print(app.config["MAIL_USERNAME"])
 
     # a simple page that says hello
     @app.route("/hello")
