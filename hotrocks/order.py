@@ -17,9 +17,6 @@ bp = Blueprint("order", __name__)
 def index():
     return render_template(
         "order/index.html",
-        MAIL_USERNAME=os.environ.get("emailUsername"),
-        MAIL_PASSWORD=os.environ.get("emailPassword"),
-        SECOND_MAIL_USERNAME=os.environ.get("adminPassword"),
     )
 
 
