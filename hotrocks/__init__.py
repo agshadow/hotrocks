@@ -12,7 +12,7 @@ def create_app(test_config=None):
 
     # set the secret key and the path /instance/hotrocks.sqlite in the app
     app.config.from_mapping(
-        SECRET_KEY="devaa", DAABASE=os.path.join(app.instance_path, "hotrocks.sqlite")
+        SECRET_KEY="devaa", DATABASE=os.path.join(app.instance_path, "hotrocks.sqlite")
     )
 
     if test_config is None:

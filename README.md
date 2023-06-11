@@ -17,6 +17,12 @@ create .env file with the following:
 emailUsername = "email@email.com"
 emailPassword = "emailpassword"
 adminPassword = "password hash" (werkzeug.security ->generate_password_hash)
+PGUSER = "postgres username"
+PGPWD = "postgres password"
+PGPATH = "path to postgres server"
+
+emailUsername is your gmail email address
+emailPassword is the gmail app password -> google account -> security -> 2 step verification -> app passwords
 
 use command line python to generate password_hash:
 python -c "from werkzeug.security import generate_password_hash; print(generate_password_hash('Password'))"
@@ -54,8 +60,9 @@ Docker build -t hotrocks .
 Then run the dockerfile on your local machine on 127.0.0.1:49160:
 Docker run -it -p 49160:80 -d hotrocks
 
-set up Azure
-create new container registry and copy the login server eg hotrocks.azurecr.io
+## set up Azure
+
+create new container registry and copy the login server eg hotrocks.azurecr.io to paste below.
 
 loginto Azure
 docker login hotrocks.azurecr.io
@@ -86,10 +93,11 @@ so once the webhook is runnings.
 
 make whatever changes to the app code then build and push the repository.
 
-emailPassword=<<GMAIL PASSWORD> --build-arg adminPassword=<PASsWORDHASH> .
-
 docker build -t hotrocks.azurecr.io/hotrocks:latest .
-
 docker push hotrocks.azurecr.io/hotrocks:latest
 
 this should trigger the webhook.
+
+## set up postgres database
+
+i used elephant SQL. Create new database then set the user/pass and url in the .env file and in the azure container configuration (as per above)

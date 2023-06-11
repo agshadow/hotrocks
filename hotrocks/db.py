@@ -1,5 +1,6 @@
 from datetime import datetime
 from sqlmodel import SQLModel, create_engine, Session, col, select
+from flask import current_app
 
 from .models import (
     User,
@@ -13,8 +14,10 @@ from .models import (
 
 import os
 
-DB_FILE = "db.sqlite3"
-engine = create_engine(f"sqlite:///{DB_FILE}", echo=True)
+engine = create_engine(
+    f"postgresql://{os.environ.get('PGUSER')}:{os.environ.get('PGPWD')}@{os.environ.get('PGPATH')}",
+    echo=True,
+)
 
 
 def initialise_db_and_create_tables():
