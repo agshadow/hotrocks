@@ -8,6 +8,7 @@ from hotrocks.extensions import mail
 from hotrocks.mapping import job_title_list, get_job_mapping
 from hotrocks.db import engine, save_job_record
 from hotrocks.models import Job
+from datetime import date
 
 bp = Blueprint("order", __name__)
 
@@ -63,6 +64,45 @@ def get_saved_jobs():
     return render_template("order/get_saved_jobs.html", jobData=loadedJobData)
 
 
+@bp.route("/duplicate_job")
+@login_required
+def duplicate_job():
+    # url is: review_and_submit?key=7
+    print("inside duplicate job")
+    key = request.args.get("key", default="", type=int)
+    error = None
+
+    if not key:
+        error = "No record specified"
+        print("error no record")
+
+    if error is not None:
+        flash(error)
+        print("redirecting)")
+        return redirect(url_for("order.index"))
+
+    # get data from database for id = key
+    with Session(engine) as sqlsession:
+        statement = select(Job).where(col(Job.id) == key)
+        results = sqlsession.exec(statement).first()
+        results_dict = results.dict()
+    print("results dict duplicate: ", results_dict)
+    # finish code to duplicate the item
+    # #results_dict.pop("id")
+    # print("results dict duplicate popped: ", results_dict)
+    # job = Job(**results_dict)
+    # newjob = save_job_record(job)
+    # results_dict = newjob.dict()
+
+    return render_template(
+        "order/review_and_submit.html",
+        jobData=results_dict,
+        headings=job_title_list,
+        db_headings=get_job_mapping(),
+        default_email_address="AFAAPP2023@gmail.com",
+    )
+
+
 @bp.route("/review_and_submit", methods=["GET", "POST"])
 @login_required
 def review_and_submit():
@@ -75,7 +115,7 @@ def review_and_submit():
         # set up email address
         emailaddr = request.form.get("emailaddr")
         msg = Message(
-            f"{savedJob.crew} - {savedJob.date} - {savedJob.job_name}",
+            f"{savedJob.crew} - {date.strftime(savedJob.date, '%a %d %b')} - {savedJob.job_name}",
             # sender=os.environ.get("emailUsername"),
             sender="AFAAPP2023@gmail.com",
             recipients=[emailaddr],
