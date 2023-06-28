@@ -134,7 +134,7 @@ def review_and_submit():
             if db_headings[heading] == "id":
                 pass
             elif db_headings[heading] == "date":
-                messageBody += f"<tr><td>DATE:</td><td> {savedJob.dict()[db_headings[heading]]}\n</td></tr>"
+                messageBody += f"<tr><td>DATE:</td><td> {date.strftime(savedJob.dict()[db_headings[heading]], '%a %d %b %Y ')}\n</td></tr>"
             else:
                 messageBody += f"<tr><td>{heading}</td><td> {savedJob.dict()[db_headings[heading]]}\n</td></tr>"
 
