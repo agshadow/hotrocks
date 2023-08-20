@@ -63,7 +63,7 @@ def get_saved_jobs():
 
     print("sorted loaded job data: ")
     print("=================================================")
-    loadedJobData = sorted(loadedJobData, key=lambda x: x["id"])
+    loadedJobData = sorted(loadedJobData, key=lambda x: x["id"], reverse=True)
     pprint.pprint(loadedJobData)
     # loadedJobData = {"CREW:": "Jeff", "CREW MANAGER/PE": "Julian"}
     return render_template("order/get_saved_jobs.html", jobData=loadedJobData)
