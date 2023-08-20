@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash,
 from flask_mail import Message
 import os
 from sqlmodel import Session, select, col
+import pprint
 
 from hotrocks.auth import login_required
 from hotrocks.extensions import mail
@@ -47,7 +48,8 @@ def get_saved_jobs():
         results = sqlsession.exec(statement).all()
     loadedJobData = []
     for result in results:
-        print("result:", result.dict())
+        print("---------------------------")
+        print("result (all jobs):", result.dict())
         loadedJobData.append(result.dict())
     # loadedJobData = []
     # loadedJobData = loadJobData()
@@ -59,7 +61,12 @@ def get_saved_jobs():
     # print("calling db---------------")
     # get_all_job_orders()
 
-    print("loaded job data: ", loadedJobData)
+    # print("loaded job data: ")
+    # pprint.pprint(loadedJobData)
+    print("sorted loaded job data: ")
+    print("=================================================")
+    loadedJobData = sorted(loadedJobData, key=lambda x: x["id"])
+    pprint.pprint(loadedJobData)
     # loadedJobData = {"CREW:": "Jeff", "CREW MANAGER/PE": "Julian"}
     return render_template("order/get_saved_jobs.html", jobData=loadedJobData)
 
