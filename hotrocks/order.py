@@ -61,8 +61,6 @@ def get_saved_jobs():
     # print("calling db---------------")
     # get_all_job_orders()
 
-    # print("loaded job data: ")
-    # pprint.pprint(loadedJobData)
     print("sorted loaded job data: ")
     print("=================================================")
     loadedJobData = sorted(loadedJobData, key=lambda x: x["id"])
