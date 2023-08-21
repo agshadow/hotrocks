@@ -1,17 +1,34 @@
 {% extends 'base.html' %} {% block header %}
 <h1>{% block title %}List Saved Jobs{% endblock %}</h1>
 
-{% endblock %} {% block content %}
+{% endblock %} 
+{% block content %}
 <h3>Your Saved Jobs:</h3>
 <h4>Click to review and send</h4>
-<ul>
+<table>
+  <tr>
+    <th>Date</th>
+    <th>Job Name</th>
+    <th>Job Number</th>
+    <th></th>
+  </tr>
   {% for savedJob in jobData %}
-  <a href="{{url_for('order.review_and_submit', key=savedJob["id"])}}">
-  <li>{{savedJob["id"]}}</li>
-  <li>{{savedJob["job_name"]}}</li>
-  <li>{{savedJob["job_number"]}}</a> ________________ <a href="{{url_for('order.duplicate_job', key=savedJob["id"])}}">Duplicate</a></li>
-  <br>
+  <tr>
+    <td>
+      {{savedJob["date"]}}
+    </td>
+    <td>
+      <a href="{{url_for('order.review_and_submit', key=savedJob["id"])}}">{{savedJob["job_name"]}}</a>
+    </td>
+    <td>
+      {{savedJob["job_number"]}}
+    </td>
+    <td>
+      <a href="{{url_for('order.duplicate_job', key=savedJob["id"])}}">Duplicate</a>
+    </td>
+
+  </tr>
   {%endfor%}
-</ul>
+</table>
 
 {% endblock %}
