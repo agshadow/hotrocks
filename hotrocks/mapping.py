@@ -2,7 +2,7 @@ from hotrocks.models import Job
 
 job_title_list = [
     "ID:",
-    "DATE: (format: 2023-05-23)",
+    "DATE:",
     "SHIFT (Day/Night):",
     "CREW:",
     "CREW MANAGER/PE",
