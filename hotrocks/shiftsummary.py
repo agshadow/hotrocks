@@ -33,7 +33,9 @@ def new():
         shiftsummary = ShiftSummary(**request.form.to_dict(flat=True))
         print(shiftsummary)
 
-        shiftsummary.date = dateutil.parser.parse(request.form.get("date"))
+        shiftsummary.date = dateutil.parser.parse(
+            request.form.get("date"), dayfirst=True
+        )
         print(f"{shiftsummary.date=}")
         add_new_shiftsummary(shiftsummary)
         return redirect(url_for("shiftsummary.shiftsummary_list"))
@@ -97,7 +99,7 @@ def editlog():
         """shiftsummarylog = ShiftSummaryLog(**request.form.to_dict(flat=True))
 
         # if date is not entered in isoformat, it will need to be parsed
-        shiftsummarylog.date = dateutil.parser.parse(request.form.get("date"))"""
+        shiftsummarylog.date = dateutil.parser.parse(request.form.get("date"), dayfirst=True)"""
 
         shiftsummarylog = save_log_record(shiftsummarylog)
         flash("Saved record")
@@ -135,7 +137,7 @@ def addlog():
         # read in shiftsummarylog from form
         # shiftsummarylog = ShiftSummaryLog(**request.form.to_dict(flat=True))
         # if date is not entered in isoformat, it will need to be parsed
-        # shiftsummarylog.date = dateutil.parser.parse(request.form.get("date"))
+        # shiftsummarylog.date = dateutil.parser.parse(request.form.get("date"), dayfirst=True)
         # save shift summary log
         shiftsummarylog = ShiftSummaryLog.load_form(request.form.to_dict(flat=True))
         print("ADD LOG: ssl: ", shiftsummarylog)

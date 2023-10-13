@@ -3,11 +3,12 @@ from flask_mail import Message
 import os
 from sqlmodel import Session, select, col
 import pprint
+import dateutil.parser
 
 from hotrocks.auth import login_required
 from hotrocks.extensions import mail
 from hotrocks.mapping import job_title_list, get_job_mapping
-from hotrocks.db import engine, save_job_record
+from hotrocks.db import engine, save_job_record, db_add_new
 from hotrocks.models import Job
 from datetime import date
 
@@ -26,12 +27,14 @@ def index():
 @login_required
 def input_new_job():
     if request.method == "POST":
-        with Session(engine) as sqlsession:
-            sqlsession.add(Job(**request.form.to_dict(flat=True)))
-            sqlsession.commit()
+        job = Job(**request.form.to_dict(flat=True))
+        print(job)
 
+        job.date = dateutil.parser.parse(request.form.get("date"), dayfirst=True)
+        print(f"{job.date=}")
+        db_add_new(job)
         flash("Saved record")
-        return redirect(url_for("index"))
+        return redirect(url_for("order.get_saved_jobs"))
     else:
         return render_template(
             "order/input_new_job.html",

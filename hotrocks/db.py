@@ -234,6 +234,16 @@ def add_new_shiftsummary(shiftsummary):
     return shiftsummary
 
 
+def db_add_new(new_record):
+    with Session(engine) as sqlsession:
+        print("Saving new record : \n -------------------------", new_record)
+        sqlsession.add(new_record)
+        sqlsession.commit()
+        sqlsession.refresh(new_record)
+        print("saved new record : \n ------------------------- ", new_record)
+    return new_record
+
+
 def get_shift_summary_by_key(key):
     # key = the id for the shift summary
     # returns tuple with the shiftsummary dictionary followed by the tuple of the log dictionaries.
