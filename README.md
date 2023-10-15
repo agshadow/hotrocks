@@ -53,6 +53,7 @@ waitress-serve --call 'hotrocks:create_app'
 
 build docker container:
 pip freeze > requirements.txt
+remove redundant hotrocks from the requirements.txt
 
 build docker container - if you have pip install -e . then remove it from the requirements.txt
 Docker build -t hotrocks .
