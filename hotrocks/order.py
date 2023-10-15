@@ -10,7 +10,7 @@ from hotrocks.extensions import mail
 from hotrocks.mapping import job_title_list, get_job_mapping
 from hotrocks.db import engine, save_job_record, db_add_new
 from hotrocks.models import Job
-from datetime import date
+from datetime import date, timedelta
 
 bp = Blueprint("order", __name__)
 
@@ -36,10 +36,13 @@ def input_new_job():
         flash("Saved record")
         return redirect(url_for("order.get_saved_jobs"))
     else:
+        tomorrows_date = date.today() + timedelta(days=1)
+        print(f"tommorows date = {tomorrows_date}")
         return render_template(
             "order/input_new_job.html",
             headings=job_title_list,
             db_headings=get_job_mapping(),
+            todaysDate=f"{date.strftime(tomorrows_date, '%d/%m/%Y')}",
         )
 
 
