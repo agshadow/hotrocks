@@ -3,17 +3,15 @@
 
 {% endblock %} {% block content %}
 <br />
-
+JOB ORDERS:
 <br />
 <a href="{{url_for('order.input_new_job')}}">Input Job Detail</a>
 
 <br />
 <a href="{{url_for('order.get_saved_jobs')}}">Get Saved Job details</a>
 <br />
-<a href="{{url_for('order.review_and_submit')}}"
-  >Review and submit Job details</a
->
 <br /><br />
+SHIFT SUMMARY<br />
 <a href="{{url_for('shiftsummary.shiftsummary_index')}}">Shift Summary</a>
 <br />
 {% endblock %}
