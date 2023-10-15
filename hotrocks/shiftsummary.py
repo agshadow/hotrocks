@@ -11,7 +11,7 @@ from hotrocks.db import (
 
 from hotrocks.auth import login_required
 from hotrocks.models import ShiftSummary, ShiftSummaryLog
-from datetime import datetime
+from datetime import datetime, date
 from flask_mail import Message
 import dateutil.parser
 
@@ -40,7 +40,10 @@ def new():
         add_new_shiftsummary(shiftsummary)
         return redirect(url_for("shiftsummary.shiftsummary_list"))
     else:
-        return render_template("shiftsummary/new.html")
+        return render_template(
+            "shiftsummary/new.html",
+            todaysDate=f"{date.strftime(date.today(), '%d/%m/%Y')}",
+        )
 
 
 @bp.route("/shiftsummary/review_item", methods=("GET", "POST"))

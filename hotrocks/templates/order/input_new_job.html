@@ -6,7 +6,11 @@
 <form action="input_new_job" method="post">
   {% for heading in headings %} {% if db_headings[heading] != 'id'%}
   <label for="{{heading}}">{{heading}}</label>
+  {% if heading == "DATE:" %}
+  <input type="text" name="{{db_headings[heading]}}" value="{{todaysDate}}" />
+  {% else %}
   <input type="text" name="{{db_headings[heading]}}" value="" />
+  {% endif %}
   <br />
   {% endif %} {%endfor%}
   <input type="submit" value="Save" />
