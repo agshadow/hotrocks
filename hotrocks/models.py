@@ -28,6 +28,8 @@ class Job(SQLModel, table=True):
 
 class Job(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
+    # commented this out prior to comitting
+    # userid: Optional[int] = Field(default=None, foreign_key="shiftsummary.id")
     date: Optional[date]
     shift: Optional[str]
     crew: Optional[str]
