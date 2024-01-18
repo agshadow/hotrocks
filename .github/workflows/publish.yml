@@ -26,6 +26,8 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build container
-        run: |
-          docker build. --tag ghcr.io/agshadow/publish-packages/hotrocks:latest
-          docker push ghcr.io/agshadow/publish-packages/hotrocks:latest
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
