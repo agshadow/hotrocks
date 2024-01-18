@@ -244,7 +244,7 @@ def email_summary():
         messageBody = f"<table><tr><td>Date:</td<td>{shiftsummary['date']}</td></tr>"
         messageBody += f"<tr><td>Job:</td<td>{shiftsummary['location']}</td></tr>"
         messageBody += f"<tr><td>Shift:</td<td>{shiftsummary['shift']}</td></tr>"
-        messageBody += f"<tr><td>Forecast:</td<td>{shiftsummary['forecast']}\</td></tr>"
+        messageBody += f"<tr><td>Forecast:</td<td>{shiftsummary['forecast']}</td></tr>"
         messageBody += f"<tr><td>Location:</td<td>{shiftsummary['scope']}</td></tr>"
         messageBody += f"</table>"
         messageBody += f"<table>"
