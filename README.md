@@ -102,3 +102,21 @@ this should trigger the webhook.
 ## set up postgres database
 
 i used elephant SQL. Create new database then set the user/pass and url in the .env file and in the azure container configuration (as per above)
+
+
+
+Git Hub Container Registry set up.
+
+to build 
+uses .github/workflows/publish.yml to build using github actions to the github container registry.
+
+In Azure go to Deployment -> Deployment Center and change it to 
+Private container registry settings settings:
+SERVER URL : https://ghcr.io
+USERNAME: your username
+PASSWORD: your PAT from github (create one at https://github.com/settings/tokens)
+FULL IMAGE NAME AND TAg : ghcr.io/<your username>/publish-packages/hotrocks:latest
+----
+
+Copy the Webhook URL.  Go to Github -> Your Repo -> Settings - > Webhooks and create a new webhook.  Use the URL copied, the rest of the settings you can leave as default.
+
